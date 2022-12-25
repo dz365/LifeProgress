@@ -6,7 +6,11 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
-const { verifyUser, signJwt, verifyUserWithoutResponse } = require("./middleware/jwtauth");
+const {
+  verifyUser,
+  signJwt,
+  verifyUserWithoutResponse,
+} = require("./middleware/jwtauth");
 const API_PORT = process.env.API_PORT || 3000;
 const BASE_URL = "/api";
 const crypto = require("crypto");
@@ -17,12 +21,7 @@ const app = express();
 app.use(cors({ origin: "*" }));
 
 // Setup body-parser middleware
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-    limit: "50mb",
-  })
-);
+app.use(bodyParser.urlencoded({ limit: "50mb" }));
 app.use(bodyParser.json({ limit: "50mb" }));
 
 mongoose.connect(process.env.MONGO_URL);
@@ -30,8 +29,10 @@ const User = require("./models/User")(mongoose);
 
 app.get("/api", (req, res) => {
   res.send("LifeProgress API");
-  var salt = crypto.randomBytes(16).toString('hex');
-  var genHash = crypto.pbkdf2Sync("password", salt, 10000, 64, 'sha512').toString('hex');
+  var salt = crypto.randomBytes(16).toString("hex");
+  var genHash = crypto
+    .pbkdf2Sync("password", salt, 10000, 64, "sha512")
+    .toString("hex");
   const newUser = new User({
     email: "johnsmith123@email.com",
     password: genHash,
@@ -66,6 +67,22 @@ router.post(`/user/signin`, (req, res, next) => {
       message: "Login successful",
       token: token,
       authData: jwt.decode(token, { json: true, complete: true }),
+    });
+  })(req, res, next);
+});
+
+router.post(`/user/create`, (req, res, next) => {
+  passport.authenticate("local-signup", (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.status(409).json({
+        message: info.message,
+      });
+    }
+    return res.status(200).json({
+      message: "Registration successful",
     });
   })(req, res, next);
 });

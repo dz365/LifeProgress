@@ -26,4 +26,42 @@ module.exports = async (UserModel, passport) => {
       }
     )
   );
+  passport.use(
+    "local-signup",
+    new LocalStrategy(
+      {
+        usernameField: "email",
+        passwordField: "password",
+        passReqToCallback: true,
+        session: false,
+      },
+      async (req, email, password, done) => {
+        if (!req.body.firstName || !req.body.lastName) {
+          return done(null, false, {
+            message: "Please enter your first and last name.",
+          });
+        }
+        try {
+          const user = await UserModel.findOne({ email });
+          if (user) {
+            return done(null, false, {
+              message: "That email is already taken.",
+            });
+          }
+          const salt = crypto.randomBytes(16).toString("hex");
+          const genHash = crypto
+            .pbkdf2Sync(password, salt, 10000, 64, "sha512")
+            .toString("hex");
+          req.body.salt = salt;
+          req.body.password = genHash;
+          const newUser = new UserModel(req.body);
+          await newUser.save();
+          newUser.save();
+          return done(null, newUser);
+        } catch (err) {
+          return done(err);
+        }
+      }
+    )
+  );
 };
