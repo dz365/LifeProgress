@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
 import SentimentNeutralIcon from "@mui/icons-material/SentimentNeutral";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
+import { useAuth } from "./Context/AuthContext";
 
 const HappinessGrid = ({ id }: any) => {
   const [happinessGrid, setHappinessGrid] = useState<string[]>([]);
+  const auth = useAuth();
 
   useEffect(() => {
     let now = new Date();
@@ -21,8 +23,12 @@ const HappinessGrid = ({ id }: any) => {
     setHappinessGrid(temp);
   };
 
+  if (!auth.getAuthData().authToken) {
+    return <h1>Please sign in first</h1>;
+  }
+
   return (
-    <div className="w-full bg-black">
+    <div className="w-full bg-black flex justify-center">
       <div className="w-11/12 flex flex-col items-center">
         <div className="flex flex-wrap gap-2 justify-center">
           {happinessGrid.map((happiness) => (

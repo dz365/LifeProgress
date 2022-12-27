@@ -1,9 +1,13 @@
 import axios from "axios";
 import { useState } from "react";
+import { useAuth } from "../Context/AuthContext";
+import { Navigate } from "react-router";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const auth = useAuth();
 
   const tailwindInputStyle =
     "rounded-lg px-2 py-1 w-8/12 text-black bg-gray-300 outline outline-offset-2 focus:outline-gray-300";
@@ -20,12 +24,23 @@ const SignIn = () => {
       },
       data: {
         email: form.email.value,
-        password: form.password.value
+        password: form.password.value,
       },
     })
-      .then(() => {console.log("Success")})
-      .catch((err) => {console.log(err)});
+      .then((res) => {
+        auth.updateData({
+          authData: JSON.stringify(res.data.authData),
+          authToken: res.data.token,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
+
+  if (auth.getAuthData().authToken) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <div className="min-h-screen bg-black w-full p-4 flex flex-col gap-8 items-center justify-center text-white font-['Varela_Round']">

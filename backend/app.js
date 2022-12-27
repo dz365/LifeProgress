@@ -27,23 +27,6 @@ app.use(bodyParser.json({ limit: "50mb" }));
 mongoose.connect(process.env.MONGO_URL);
 const User = require("./models/User")(mongoose);
 
-app.get("/api", (req, res) => {
-  res.send("LifeProgress API");
-  var salt = crypto.randomBytes(16).toString("hex");
-  var genHash = crypto
-    .pbkdf2Sync("password", salt, 10000, 64, "sha512")
-    .toString("hex");
-  const newUser = new User({
-    email: "johnsmith123@email.com",
-    password: genHash,
-    salt: salt,
-    firstName: "John",
-    lastName: "Smith",
-    age: 25,
-  });
-  newUser.save();
-});
-
 // Initialize passport
 app.use(passport.initialize());
 require("./middleware/passport")(User, passport);
