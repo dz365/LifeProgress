@@ -41,7 +41,7 @@ router.post(`/user/signin`, (req, res, next) => {
     }
     if (!user) {
       return res.status(401).json({
-        message: "Login failed.",
+        message: "Incorrect username and/or password.",
       });
     }
     const token = signJwt(user);

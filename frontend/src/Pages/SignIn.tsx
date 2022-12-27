@@ -2,15 +2,16 @@ import axios from "axios";
 import { useState } from "react";
 import { useAuth } from "../Context/AuthContext";
 import { Navigate } from "react-router";
+import Alert from '@mui/material/Alert';
+import EmailIcon from '@mui/icons-material/Email';
+import LockIcon from '@mui/icons-material/Lock';
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [signInErrMsg, setSignInErrMsg] = useState("");
 
   const auth = useAuth();
-
-  const tailwindInputStyle =
-    "rounded-lg px-2 py-1 w-8/12 text-black bg-gray-300 outline outline-offset-2 focus:outline-gray-300";
 
   const submitForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -28,13 +29,17 @@ const SignIn = () => {
       },
     })
       .then((res) => {
+        setSignInErrMsg("")
         auth.updateData({
           authData: JSON.stringify(res.data.authData),
           authToken: res.data.token,
         });
       })
       .catch((err) => {
-        console.log(err);
+        setSignInErrMsg(
+          (err.response && err.response.data && err.response.data.message) ||
+            "A server error has occurred. Please try again later."
+        );
       });
   };
 
@@ -45,34 +50,38 @@ const SignIn = () => {
   return (
     <div className="min-h-screen bg-black w-full p-4 flex flex-col gap-8 items-center justify-center text-white font-['Varela_Round']">
       <h1 className="text-7xl">sign in</h1>
+      {signInErrMsg == "" ? false : <Alert variant="filled" severity="error">{signInErrMsg}</Alert>}
       <form
         onSubmit={(e) => submitForm(e)}
-        className="w-1/3 flex flex-col gap-4"
+        className="w-1/4 flex flex-col gap-4 items-center"
       >
-        <label className="flex justify-between">
-          email
+        <label className="flex gap-2 rounded-lg p-2 text-indigo-900 bg-gray-300">
+          <p className="text-5xl"><EmailIcon fontSize="inherit" /></p>
           <input
-            placeholder="johnsmith123@email.com"
+            placeholder="Enter your email"
+            required
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className={tailwindInputStyle}
+            className="bg-gray-300 outline-none border-indigo-500 focus:border-b-4"
           />
         </label>
-        <label className="flex justify-between">
-          password
+        <label className="flex gap-2 rounded-lg p-2 text-indigo-900 bg-gray-300">
+        <p className="text-5xl"><LockIcon fontSize="inherit" /></p>
           <input
-            placeholder="123456789"
+            type="password"
+            required
+            placeholder="Enter your password"
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className={tailwindInputStyle}
+            className="bg-gray-300 outline-none border-indigo-500 focus:border-b-4"
           />
         </label>
         <input
           type="submit"
           value="submit"
-          className="w-1/3 self-center text-xl rounded-3xl border-2 border-gray-500 bg-gray-600 cursor-pointer transition duration-300 hover:scale-110 hover:bg-gray-800"
+          className="w-1/3 self-center text-xl rounded-3xl border-2 border-gray-500 bg-blue-900 cursor-pointer transition duration-300 hover:scale-110 hover:bg-gray-800"
         />
       </form>
     </div>

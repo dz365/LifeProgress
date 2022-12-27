@@ -15,7 +15,7 @@ module.exports = async (UserModel, passport) => {
           if (err) return done(err);
 
           if (!user)
-            return done(null, false, { message: "Incorrect username." });
+            return done(null, false);
 
           const isValid =
             crypto

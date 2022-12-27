@@ -11,7 +11,7 @@ const HappinessGrid = ({ id }: any) => {
   useEffect(() => {
     let now = new Date();
     let temp: string[] = [];
-    for (let d = new Date(2022, 0, 1); d <= now; d.setDate(d.getDate() + 1)) {
+    for (let d = new Date(2022, 11, 1); d <= now; d.setDate(d.getDate() + 1)) {
       temp.push("unknown");
     }
     setHappinessGrid(temp);
@@ -24,11 +24,15 @@ const HappinessGrid = ({ id }: any) => {
   };
 
   if (!auth.getAuthData().authToken) {
-    return <h1>Please sign in first</h1>;
+    return (
+      <div className="w-full h-screen bg-neutral-800 flex text-white text-3xl items-center justify-center">
+        Please sign in to access content.
+      </div>
+    );
   }
 
   return (
-    <div className="w-full bg-black flex justify-center">
+    <div className="w-full bg-neutral-800 flex justify-center">
       <div className="w-11/12 flex flex-col items-center">
         <div className="flex flex-wrap gap-2 justify-center">
           {happinessGrid.map((happiness) => (
@@ -37,7 +41,7 @@ const HappinessGrid = ({ id }: any) => {
                 happiness === "bad" ? "bg-red-500" : false
               } ${happiness === "ok" ? "bg-yellow-300" : false} ${
                 happiness === "good" ? "bg-green-500" : false
-              } ${happiness === "unknown" ? "bg-slate-500" : false}`}
+              } ${happiness === "unknown" ? "bg-neutral-700" : false}`}
             ></div>
           ))}
         </div>

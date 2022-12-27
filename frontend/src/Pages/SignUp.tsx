@@ -30,7 +30,7 @@ const SignUp = () => {
       },
     })
       .then(() => {})
-      .catch((err) => {});
+      .catch((err) => {console.log(err)});
   };
 
   return (
@@ -53,6 +53,7 @@ const SignUp = () => {
         <label className="flex justify-between">
           password
           <input
+            type="password"
             placeholder="123456789"
             name="password"
             value={password}
