@@ -21,7 +21,7 @@ const AddEntry = () => {
     },
   };
 
-  const newHappinessEntry = (e: any) => {
+  const newDailyReflectionEntry = (e: any) => {
     e.preventDefault();
     console.log(e)
   };
@@ -34,7 +34,7 @@ const AddEntry = () => {
     <div className="text-white flex flex-col items-center">
       <p>Current date</p>
       <p>{new Date().toDateString()}</p>
-      <form onSubmit={(e) => newHappinessEntry(e)}>
+      <form onSubmit={(e) => newDailyReflectionEntry(e)}>
         <div className="flex flex-col">
           <div className="text-6xl flex">
             {Object.entries(reactions).map(([key, value]) => (

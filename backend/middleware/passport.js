@@ -58,20 +58,18 @@ module.exports = async (UserModel, DailyReflectionsModel, passport) => {
 
           const newReflection = {
             year: new Date().getFullYear(),
-            month: {
-              1: [],
-              2: [],
-              3: [],
-              4: [],
-              5: [],
-              6: [],
-              7: [],
-              8: [],
-              9: [],
-              10: [],
-              11: [],
-              12: [],
-            },
+            1: [],
+            2: [],
+            3: [],
+            4: [],
+            5: [],
+            6: [],
+            7: [],
+            8: [],
+            9: [],
+            10: [],
+            11: [],
+            12: [],
           };
 
           const newDailyReflections = new DailyReflectionsModel({
