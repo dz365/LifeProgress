@@ -55,7 +55,7 @@ const SignIn = () => {
         onSubmit={(e) => submitForm(e)}
         className="w-1/4 flex flex-col gap-4 items-center"
       >
-        <label className="flex gap-2 rounded-lg p-2 text-indigo-900 bg-gray-300">
+        <label className="flex gap-2 rounded-lg px-2 py-1 text-indigo-900 bg-gray-300">
           <p className="text-5xl"><EmailIcon fontSize="inherit" /></p>
           <input
             placeholder="Enter your email"
@@ -66,7 +66,7 @@ const SignIn = () => {
             className="bg-gray-300 outline-none border-indigo-500 focus:border-b-4"
           />
         </label>
-        <label className="flex gap-2 rounded-lg p-2 text-indigo-900 bg-gray-300">
+        <label className="flex gap-2 rounded-lg px-2 py-1 text-indigo-900 bg-gray-300">
         <p className="text-5xl"><LockIcon fontSize="inherit" /></p>
           <input
             type="password"

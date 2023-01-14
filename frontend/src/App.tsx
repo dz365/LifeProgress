@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import { AuthProvider } from "./Context/AuthContext";
 import Navbar from "./Components/Navbar";
-import HappinessGrid from "./HappinessGrid";
+import HappinessGrid from "./Pages/Home/HappinessGrid";
 import SignIn from "./Pages/SignIn";
 import SignUp from "./Pages/SignUp";
 
