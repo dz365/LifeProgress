@@ -24,12 +24,14 @@ app.use(cors({ origin: "*" }));
 app.use(bodyParser.urlencoded({ limit: "50mb" }));
 app.use(bodyParser.json({ limit: "50mb" }));
 
+// Setup mongoDB connection.
 mongoose.connect(process.env.MONGO_URL);
 const User = require("./models/User")(mongoose);
+const DailyReflections = require("./models/DailyReflections")(mongoose);
 
 // Initialize passport
 app.use(passport.initialize());
-require("./middleware/passport")(User, passport);
+require("./middleware/passport")(User, DailyReflections, passport);
 
 app.use(`${BASE_URL}`, router);
 

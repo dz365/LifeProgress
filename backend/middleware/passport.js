@@ -1,7 +1,7 @@
 const LocalStrategy = require("passport-local");
 const crypto = require("crypto");
 
-module.exports = async (UserModel, passport) => {
+module.exports = async (UserModel, DailyReflectionsModel, passport) => {
   passport.use(
     "local-signin",
     new LocalStrategy(
@@ -14,8 +14,7 @@ module.exports = async (UserModel, passport) => {
         UserModel.findOne({ email: username }, (err, user) => {
           if (err) return done(err);
 
-          if (!user)
-            return done(null, false);
+          if (!user) return done(null, false);
 
           const isValid =
             crypto
@@ -56,7 +55,31 @@ module.exports = async (UserModel, passport) => {
           req.body.password = genHash;
           const newUser = new UserModel(req.body);
           await newUser.save();
-          newUser.save();
+
+          const newReflection = {
+            year: new Date().getFullYear(),
+            month: {
+              1: [],
+              2: [],
+              3: [],
+              4: [],
+              5: [],
+              6: [],
+              7: [],
+              8: [],
+              9: [],
+              10: [],
+              11: [],
+              12: [],
+            },
+          };
+
+          const newDailyReflections = new DailyReflectionsModel({
+            userID: newUser._id,
+            reflections: [newReflection],
+          });
+
+          await newDailyReflections.save();
           return done(null, newUser);
         } catch (err) {
           return done(err);
